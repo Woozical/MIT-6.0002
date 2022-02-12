@@ -27,5 +27,33 @@ def maxVal(toConsider:list, avail):
 
     # Choose the better branch
     result = (leftVal, leftTake + (curItem, )) if leftVal > rightVal else (rightVal, rightTake)
-
   return result
+
+def fastMaxVal(toConsider:list, avail, memo=dict()):
+  """ Optimize maxVal() via use of memoization. The memo uses a tuple as its key:
+      ( len(toConsider), avail )"""
+  try:
+    return memo[(len(toConsider), avail)]
+  except KeyError:
+    if len(toConsider) < 1 or avail == 0:
+      result = ( 0, () )
+    elif toConsider[0].cost > avail:
+      # If our current item to consider's cost goes beyond our budget, we can only explore the right
+      # branch of our search tree (i.e. don't take the item)
+      result = fastMaxVal(toConsider[1:], avail, memo)
+    else:
+      curItem = toConsider[0]
+
+      # Recursively explore left branch...
+      leftVal, leftTake = fastMaxVal( toConsider[1:], avail - curItem.cost, memo )
+      # ...Then add the value of the current decision
+      leftVal += curItem.value
+      
+      # Recursively explore right branch (do not choose curItem)
+      rightVal, rightTake = fastMaxVal( toConsider[1:], avail, memo)
+
+      # Choose the better branch
+      result = (leftVal, leftTake + (curItem, )) if leftVal > rightVal else (rightVal, rightTake)
+
+    memo[(len(toConsider), avail)] = result
+    return result

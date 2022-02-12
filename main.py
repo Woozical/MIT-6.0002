@@ -1,9 +1,11 @@
 from common.item import Item
 from lec1.greedy import greedy
-from lec2.brute_search import maxVal
+from lec2.brute_search import maxVal, fastMaxVal
+from lec2.fib import fib, fastFib
 
 foods = [
   Item('Wine', 89, 123),
+  Item('Beer', 90, 154),
   Item('Beer', 90, 154),
   Item('Pizza', 95, 258),
   Item('Burger', 100, 354),
@@ -36,9 +38,18 @@ def output_greedy():
 
 def output_brute():
   print('--- Use brute force algorithm to find best solution ---')
-  value, items = maxVal(foods, maxCalories)
-  print(f"Total Value: {value}")
+  value, items = fastMaxVal(foods, maxCalories)
+  budget = maxCalories
+  for n in items:
+    budget -= n.cost
+  print(f"Total Value: {value} Budget Remaining: {budget}")
   print(f"Items taken: {items}\n")
 
-output_greedy()
-output_brute()
+def output_fib(count=120, fast=False):
+  for i in range(count):
+    n = fastFib(i) if fast else fib(i)
+    print(f"Fib {i}: {n}")
+
+# output_greedy()
+# output_brute()
+# output_fib(fast=True)
