@@ -52,6 +52,41 @@ def greedy(F, psn:list):
 
   return (score, activations)
 
+# Rather than sort, keep track of two highest ps# while we iterate through psn, using these to fulfill sum >= 20 constraint
+# This allows us to solve in O(n) time at the cost of a little more memory
+def fastGreedy(F, psn:list):
+  """ Assuming psn is a list of 5 positive numbers """
+  activations = { psn[0] : False, psn[1] : False, psn[2] : False, psn[3] : False, psn[4] : False }
+  activated = 0
+  addendum = 0
+  # Store the highest n below F in index 1, and 2nd-highest n in index 0
+  # This allows us to easily use our # of activations as a loop condition and index
+  high = [-1, -1]
+  for n in psn:
+    if n > F:
+      activations[n] = True
+      activated += 1
+      addendum += (n * 10)
+    else:
+      if n > high[1]:
+        high[0] = high[1]
+        high[1] = n
+      elif n > high[0]:
+        high[0] = n
+  
+  # Fulfill sum >= 20 constraint
+  while activated < 2:
+    n = high[activated]
+    activations[n] = True
+    activated += 1
+    addendum += (n * 10)
+  
+  # Calculate final score
+  score = (60 - (activated * 10)) * F + addendum
+
+  return (score, activations)
+
+
 # Brute-force solution: Examine all possible combinations of TARGETS being 0 or 10, and pick the scenario which results in the highest score
 # We could implement this with a search tree, but would it beat the above ruleset? Certainly not in runtime performance.
 
@@ -59,7 +94,7 @@ from random import random
 
 def test():
   F, psn = random(), [random(), random(), random(), random(), random()]
-  score, activ = greedy(F, psn)
+  score, activ = fastGreedy(F, psn)
   print("F:", F)
   print("psn:", psn)
   print("Score:", score)
