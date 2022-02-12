@@ -1,20 +1,5 @@
 """ Implementation of Greedy Algorithm to solve 0/1 Knapsack Problems"""
 
-class Item:
-  def __init__(self, name, value, cost):
-    self.name = name
-    self.value = value
-    self.cost = cost
-  
-  def __repr__(self):
-    return f'<Item {self.name}>'
-  
-  def getDensity(self):
-    return self.value / self.cost
-
-
-
-
 def greedy(items:list, constraint, key_func):
   """ Solves 0/1 Knapsack Problem via "greedy" solution. I.E. Take the "best" available item until we reach our constraint.
       Returns a tuple (taken items, value of taken items, leftover budget)

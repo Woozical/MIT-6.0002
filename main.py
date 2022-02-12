@@ -1,4 +1,6 @@
-from greedy import Item, greedy
+from common.item import Item
+from lec1.greedy import greedy
+from lec2.brute_search import maxVal
 
 foods = [
   Item('Wine', 89, 123),
@@ -13,7 +15,7 @@ foods = [
 
 maxCalories = 750
 
-def output_results():
+def output_greedy():
   print('--- Use greedy strategy, favoring highest item value ---')
 
   taken, val, budget = greedy(foods, maxCalories, lambda x : x.value)
@@ -30,6 +32,13 @@ def output_results():
 
   taken, val, budget = greedy(foods, maxCalories, Item.getDensity)
   print(f'Total Value: {val} Budget Remaining: {budget}')
-  print(f'Items taken: {taken}')
+  print(f'Items taken: {taken} \n')
 
-output_results()
+def output_brute():
+  print('--- Use brute force algorithm to find best solution ---')
+  value, items = maxVal(foods, maxCalories)
+  print(f"Total Value: {value}")
+  print(f"Items taken: {items}\n")
+
+output_greedy()
+output_brute()
